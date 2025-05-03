@@ -29,11 +29,26 @@ router.get("/", (req, res) => {
   });
 });
 
-router.delete("/:id", (req, res) => {
-  Tweet.deleteOne({_id:req.params.id}).then((data) => {
-    Tweet.find().then((data) => {
-      res.json({ result: true, tweet: data });
+router.put("/like/:id", (req, res) => {
+  const userId = req.body.userId;
+  Tweet.findById(req.params.id).then(tweet => {
+    if (!tweet) return res.status(404).json({ result: false, message: "Tweet not found" });
+
+    if (tweet.likes.includes(userId)) {
+      tweet.likes.pull(userId); // déjà liké, donc on retire
+    } else {
+      tweet.likes.push(userId); // sinon on ajoute
+    }
+
+    tweet.save().then(updatedTweet => {
+      res.json({ result: true, tweet: updatedTweet });
     });
+  });
+});
+
+router.delete("/:id", (req, res) => {
+  Tweet.findByIdAndDelete(req.params.id).then(() => {
+    res.json({ result: true });
   });
 });
 

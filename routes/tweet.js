@@ -11,20 +11,27 @@ router.post("/", (req, res) => {
       content:req.body.content,
       user:data._id
     });
-    newTweet.save().then(() => {
-      res.json({ result: true});
+    newTweet.save().then((savedTweet) => {
+      Tweet.findById(savedTweet._id)
+        .populate('user')
+        .then((populatedTweet) => {
+          res.json({ result: true, tweet: populatedTweet });
+        });
     });
   });
 });
 
 router.get("/", (req, res) => {
-  Tweet.find({ content: req.body.content }).populate('user').then((data) => {
+  Tweet.find()
+  .sort({createdAt: -1})
+  .populate('user')
+  .then((data) => {
     res.json({ tweet: data });
   });
 });
 
 router.delete("/tweet", (req, res) => {
-  Tweet.deleteOne({}).then((data) => {
+  Tweet.deleteOne({_id: req.body.tweetId}).then((data) => {
     
   });
   res.json({});

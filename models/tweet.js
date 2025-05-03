@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const tweetSchema = mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
   content: String,
-});
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "users" }, 
+}, {timestamps: true});
 
 const Tweet = mongoose.model("tweets", tweetSchema);
 

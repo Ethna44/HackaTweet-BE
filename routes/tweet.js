@@ -4,7 +4,6 @@ const Tweet = require("../models/tweet");
 const User = require("../models/users");
 
 router.post("/", (req, res) => {
-
   User.findOne({ token: req.body.token }).then((data) => {
     console.log(data);
     const newTweet = new Tweet({
@@ -30,11 +29,12 @@ router.get("/", (req, res) => {
   });
 });
 
-router.delete("/tweet", (req, res) => {
-  Tweet.deleteOne({_id: req.body.tweetId}).then((data) => {
-    
+router.delete("/:id", (req, res) => {
+  Tweet.deleteOne({_id:req.params.id}).then((data) => {
+    Tweet.find().then((data) => {
+      res.json({ result: true, tweet: data });
+    });
   });
-  res.json({});
 });
 
 module.exports = router;

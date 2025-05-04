@@ -46,7 +46,7 @@ router.post("/signin", (req, res) => {
     console.log(req.body.username);
     console.log(req.body.password);
     if (data && bcrypt.compareSync(req.body.password, data.password)) {
-      res.json({ result: true, token: data.token, msg: "Access Granted" });
+      res.json({ result: true, token: data.token,firstname:data.firstname, msg: "Access Granted" });
     } else {
       res.json({ result: false, msg: "User not found" });
     }

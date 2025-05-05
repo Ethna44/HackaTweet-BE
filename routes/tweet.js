@@ -5,7 +5,6 @@ const User = require("../models/users");
 
 router.post("/", (req, res) => {
   User.findOne({ token: req.body.token }).then((data) => {
-    console.log(data);
     const newTweet = new Tweet({
       content: req.body.content,
       user: data._id,
@@ -14,7 +13,7 @@ router.post("/", (req, res) => {
       Tweet.findById(savedTweet._id)
         .populate("user")
         .then((populatedTweet) => {
-          res.json({ result: true, tweet: populatedTweet });
+          res.json({ result: true, tweet: populatedTweet, content: populatedTweet.content });
         });
     });
   });
